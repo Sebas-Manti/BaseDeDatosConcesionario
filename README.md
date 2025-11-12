@@ -94,12 +94,10 @@ Una factura puede incluir varios carros y piezas (relaciones N:M con tablas inte
 #### Ejemplo:
 
 VENDEDOR(id_vendedor PK, nombre, telefono, correo)
-CLIENTE(id_cliente PK, nombre, cedula, telefono)
-CARRO(id_carro PK, marca, modelo, precio)
-PIEZA(id_pieza PK, nombre, tipo, precio)
-FACTURA(id_factura PK, fecha, id_cliente FK, id_vendedor FK, total)
-FACTURA_CARRO(id_factura FK, id_carro FK)
-FACTURA_PIEZA(id_factura FK, id_pieza FK)
+CLIENTE(id_cliente PK, nombre, fecha_de_nacimiento, cedula, telefono, direccion, correo, historial_crediticio, capacidad_endeudamiento)
+CARRO(id_carro PK, marca, modelo, color, motor, combustible, traccion, transmision, anno, tipo_carroceria, hp, puertas, torque, precio)
+FACTURA(id_factura PK, fecha_emision, hora_emision, cantidad, precio_unitario, metodo_pago, subtotal, iva, id_cliente FK, id_vendedor FK, id_carro, total, estado)
+
 
 ## 8. Normalización (hasta 3FN)
 
