@@ -1,12 +1,8 @@
 module DB
 using MySQL
+using TOML
 
-const DB_CONFIG = Dict(
-  :host => "127.0.0.1",
-  :user => "root",
-  :password => "ProyectoBD1Final",
-  :db => "concesionarioKONRUEDAS"
-)
+CONF = TOML.parsefile("config.toml")["database"]
 
 function get_conn()
   return MySQL.connect(
