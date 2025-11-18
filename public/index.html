@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>CRUD Concesionario</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+<h1>CRUD Concesionario</h1>
+
+<div id="main-container">
+  <div id="left-panel">
+    <h3>Pregunta en NL</h3>
+    <textarea id="nl-box" placeholder="hazme una pregunta"></textarea>
+
+    <h3>SQL Generado / Escrito</h3>
+    <textarea id="sql-box">SELECT *</textarea>
+
+    <button id="nl-to-sql">Generar SQL</button>
+    <button id="run-sql">Ejecutar SQL</button>
+    <button id="enqueue-sql">Agregar a Cola</button>
+
+    <h3>Esquema MER</h3>
+    <div id="schema-mer"></div>
+  </div>
+
+  <div id="right-panel">
+    <h3>Cola</h3>
+    <pre id="queue"></pre>
+
+    <h3>Resultado</h3>
+    <div id="result"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
