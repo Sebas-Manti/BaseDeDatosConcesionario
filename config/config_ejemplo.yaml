@@ -1,0 +1,8 @@
+database:
+  host: "127.0.0.1"
+  user: "root"
+  password: "TU_PASSWORD"
+  db: "concesionario"
+
+llm:
+  model: "qwen2.5"
