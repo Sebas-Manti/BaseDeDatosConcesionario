@@ -1,8 +1,8 @@
 database:
-  host: "127.0.0.1"
-  user: "root"
-  password: "ProyectoBD1Final"
-  db: "concesionario"
+  host: "localhost"
+  user: "concesionario"
+  password: "123"
+  db: "concesionarioKONRUEDAS"
 
 llm:
   model: "qwen2.5"
