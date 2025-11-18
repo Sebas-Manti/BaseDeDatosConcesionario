@@ -2,7 +2,7 @@ module DB
 using MySQL
 using TOML
 
-CONF = TOML.parsefile("config.toml")["database"]
+DB_CONFIG = TOML.parsefile("config.toml")["database"]
 
 function get_conn()
   return MySQL.connect(
