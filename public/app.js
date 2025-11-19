@@ -62,23 +62,36 @@ setInterval(refreshQueue, 2000);
 async function renderSchema() {
     const res = await fetch("/api/schema");
     const schema = await res.json();
-    let mermaidStr = "erDiagram\n";
-
+    const container = document.getElementById("schema-mer");
     const tables = {};
+    const relations = [];
+
+    const safeName = name => name.replace(/[^a-zA-Z0-9_]/g, "_");
+
     schema.forEach(row => {
-        if (!tables[row.TABLE_NAME]) tables[row.TABLE_NAME] = [];
-        const cleanType = row.COLUMN_TYPE.replace(/[(),]/g, "_");
-        tables[row.TABLE_NAME].push(`${row.COLUMN_NAME} ${cleanType}`);
+        const tableName = safeName(row.TABLE_NAME);
+        const colName = safeName(row.COLUMN_NAME);
+        const colType = row.COLUMN_TYPE.replace(/[^\w]/g, "");
+        if (!tables[tableName]) tables[tableName] = [];
+        tables[tableName].push(`${colName} ${colType}`);
     });
 
+    relations.push(`${safeName("CONCESIONARIO")} o{--|| ${safeName("CIUDAD")} : id_ciudad`);
+    relations.push(`${safeName("VENDEDOR")} o{--|| ${safeName("CONCESIONARIO")} : id_concesionario`);
+    relations.push(`${safeName("FACTURA")} o{--o{ ${safeName("CLIENTE")} : id_cliente`);
+    relations.push(`${safeName("FACTURA")} o{--|| ${safeName("VENDEDOR")} : id_vendedor`);
+    relations.push(`${safeName("FACTURA")} ||--|| ${safeName("CARRO")} : id_carro`);
+
+    let mermaidStr = "erDiagram\n";
     for (const t in tables) {
         mermaidStr += `    ${t} {\n`;
         tables[t].forEach(col => mermaidStr += `        ${col}\n`);
         mermaidStr += `    }\n`;
     }
+    relations.forEach(r => mermaidStr += `    ${r}\n`);
 
-    document.getElementById("schema-mer").innerHTML = `<div class="mermaid">${mermaidStr}</div>`;
-    mermaid.init(undefined, ".mermaid");
+    container.innerHTML = `<div class="mermaid">${mermaidStr}</div>`;
+    mermaid.initialize({ startOnLoad: false });
+    mermaid.init(undefined, container.querySelectorAll('.mermaid'));
 }
-
-renderSchema();
+document.addEventListener("DOMContentLoaded", renderSchema);
