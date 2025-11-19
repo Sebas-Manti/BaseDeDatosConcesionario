@@ -60,4 +60,8 @@ def history():
 
 @app.post("/api/nl2sql")
 def nl2sql(body: dict):
-    return {"sql": nl_to_sql(body["prompt"])}
+    prompt = body.get("prompt")
+    print("Prompt recibido:", prompt)
+    sql = nl_to_sql(prompt)
+    print("SQL generado:", sql)
+    return {"sql": sql}
