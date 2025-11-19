@@ -21,7 +21,7 @@ def nl_to_sql(prompt: str):
     final_prompt = f"{context}\nUsuario: {prompt}\nSQL:"
 
     data = {
-        "model": CONFIG["model"],
+        "model": "qwen2.5:0.5b",
         "prompt": final_prompt,
         "stream": False
     }
