@@ -4,7 +4,7 @@ const resultDiv = document.getElementById("result");
 const queueDiv = document.getElementById("queue");
 
 document.getElementById("nl-to-sql").onclick = async () => {
-    const res = await fetch("/api/nl2sql", {
+    const res = await fetch("http://127.0.0.1:8000/api/nl2sql", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: nlBox.value })
