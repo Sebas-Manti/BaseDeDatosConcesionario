@@ -1,4 +1,4 @@
-#!/Users/sebastianmantilla/Universidad/7mo/BasesdeDatos1/BaseDeDatosConcesionario/venv/bin/python3.12
+#!/root/BaseDeDatosConcesionario/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

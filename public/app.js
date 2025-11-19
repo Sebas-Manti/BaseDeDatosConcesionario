@@ -62,19 +62,27 @@ setInterval(refreshQueue, 2000);
 async function renderSchema() {
     const res = await fetch("/api/schema");
     const schema = await res.json();
+
     let mermaidStr = "erDiagram\n";
     const tables = {};
+
     schema.forEach(row => {
         if (!tables[row.TABLE_NAME]) tables[row.TABLE_NAME] = [];
-        tables[row.TABLE_NAME].push(row.COLUMN_NAME + " " + row.COLUMN_TYPE);
+        let colName = row.COLUMN_NAME.replace(/[^a-zA-Z0-9_]/g, "_");
+        let colType = row.COLUMN_TYPE.replace(/[^a-zA-Z0-9_]/g, "_");
+        tables[row.TABLE_NAME].push(`${colName} ${colType}`);
     });
+
     for (const t in tables) {
-        mermaidStr += `    ${t} {\n`;
+        let tableName = t.replace(/[^a-zA-Z0-9_]/g, "_");
+        mermaidStr += `    ${tableName} {\n`;
         tables[t].forEach(col => mermaidStr += `        ${col}\n`);
         mermaidStr += `    }\n`;
     }
+
     document.getElementById("schema-mer").innerHTML = `<div class="mermaid">${mermaidStr}</div>`;
-    mermaid.init();
+
+    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
 }
 
 renderSchema();
