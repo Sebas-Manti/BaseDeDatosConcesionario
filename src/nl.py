@@ -1,33 +1,41 @@
 import requests
+from pathlib import Path
 import yaml
-from src.db import get_schema
+
+CONFIG_PATH = Path("config/config.yaml")
+CONTEXT_FILE = Path.home() / "BaseDeDatosConcesionario/src/contexto.txt"
 
 def load_config():
-    with open("config/config.yaml", "r") as f:
+    with open(CONFIG_PATH, "r") as f:
         return yaml.safe_load(f)
 
 CONFIG = load_config()["llm"]
 
+def nl_to_sql(prompt: str):
+    if not CONTEXT_FILE.exists():
+        raise FileNotFoundError(f"No se encontró el archivo de contexto: {CONTEXT_FILE}")
 
-def nl_to_sql(prompt):
-    schema = get_schema()
+    with open(CONTEXT_FILE, "r") as f:
+        context = f.read()
 
-    system_prompt = f"""
-Eres un modelo NL2SQL. Convierte la pregunta del usuario en SQL válido para MariaDB.
-NO EXPLIQUEES NADA. SOLO ENTREGA SQL PLANO.
-Esquema:
-{schema}
-    """
+    final_prompt = f"{context}\nUsuario: {prompt}\nSQL:"
 
     data = {
         "model": CONFIG["model"],
-        "prompt": system_prompt + "\nUsuario: " + prompt,
+        "prompt": final_prompt,
         "stream": False
     }
 
-    r = requests.post("http://localhost:11434/api/generate", json=data)
-    out = r.json()["response"]
+    try:
+        r = requests.post("http://localhost:11434/api/generate", json=data)
+        r.raise_for_status()
+        out = r.json()["response"]
+        out = out.replace("```sql", "").replace("```", "").strip()
+        return out
+    except Exception as e:
+        print("Error generando SQL:", e)
+        return ""
 
-    # extra: limpiar backticks y explicaciones
-    out = out.replace("```sql", "").replace("```", "").strip()
-    return out
+if __name__ == "__main__":
+    q = input("Pregunta en NL: ")
+    print("SQL generado:", nl_to_sql(q))
